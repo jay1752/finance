@@ -6,6 +6,7 @@ This is the KEY to making the application flexible and future-proof.
 from typing import Optional
 from .base_adapter import BaseDataAdapter
 from .yahoo_adapter import YahooFinanceAdapter
+from .nse_adapter import NSEAdapter
 import logging
 
 logger = logging.getLogger(__name__)
@@ -28,8 +29,8 @@ class AdapterFactory:
     # Registry of available adapters
     _adapters = {
         'yahoo': YahooFinanceAdapter,
-        # Phase 2: Add NSE adapter
-        # 'nse': NSEAdapter,
+        # Phase 2: NSE adapter for supplementary data (FII/DII, delivery %)
+        'nse': NSEAdapter,
         # Phase 3: Add paid adapters
         # 'upstox': UpstoxAdapter,
         # 'zerodha': ZerodhaAdapter,

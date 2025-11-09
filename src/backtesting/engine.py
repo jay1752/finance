@@ -239,6 +239,38 @@ class BacktestEngine:
         start_date = str(data.index[0].date())
         end_date = str(data.index[-1].date())
 
+        # Calculate advanced metrics
+        returns = [t.profit_loss_pct for t in self.trades]
+
+        # Sharpe Ratio (assuming 0% risk-free rate)
+        sharpe_ratio = 0
+        if len(returns) > 1:
+            import numpy as np
+            avg_return = np.mean(returns)
+            std_return = np.std(returns)
+            sharpe_ratio = (avg_return / std_return) * np.sqrt(252) if std_return > 0 else 0
+
+        # Sortino Ratio (only downside deviation)
+        sortino_ratio = 0
+        if len(returns) > 1:
+            import numpy as np
+            avg_return = np.mean(returns)
+            downside_returns = [r for r in returns if r < 0]
+            if downside_returns:
+                downside_std = np.std(downside_returns)
+                sortino_ratio = (avg_return / downside_std) * np.sqrt(252) if downside_std > 0 else 0
+
+        # Max Drawdown
+        max_drawdown = self._calculate_max_drawdown()
+
+        # Calmar Ratio (annualized return / max drawdown)
+        calmar_ratio = 0
+        if max_drawdown != 0:
+            days = (pd.to_datetime(end_date) - pd.to_datetime(start_date)).days
+            years = days / 365.25
+            annualized_return = ((1 + total_return_pct / 100) ** (1 / years) - 1) * 100 if years > 0 else total_return_pct
+            calmar_ratio = abs(annualized_return / max_drawdown)
+
         return {
             'strategy_name': strategy_name,
             'start_date': start_date,
@@ -260,8 +292,39 @@ class BacktestEngine:
                 if losing_trades and sum(t.profit_loss for t in losing_trades) != 0 else 0,
                 2
             ),
+            'sharpe_ratio': round(sharpe_ratio, 3),
+            'sortino_ratio': round(sortino_ratio, 3),
+            'max_drawdown': round(max_drawdown, 2),
+            'calmar_ratio': round(calmar_ratio, 3),
             'trades': self.trades
         }
+
+    def _calculate_max_drawdown(self) -> float:
+        """
+        Calculate maximum drawdown from trades.
+
+        Returns:
+            Maximum drawdown as percentage
+        """
+        if not self.trades:
+            return 0
+
+        # Build equity curve
+        equity = [self.initial_capital]
+        for trade in self.trades:
+            equity.append(equity[-1] + trade.profit_loss)
+
+        # Calculate drawdown at each point
+        peak = equity[0]
+        max_dd = 0
+
+        for value in equity:
+            if value > peak:
+                peak = value
+            dd = ((peak - value) / peak) * 100 if peak > 0 else 0
+            max_dd = max(max_dd, dd)
+
+        return max_dd
 
     def _empty_results(self) -> Dict[str, Any]:
         """Return empty results when no trades executed."""
@@ -282,6 +345,10 @@ class BacktestEngine:
             'max_profit': 0,
             'max_loss': 0,
             'profit_factor': 0,
+            'sharpe_ratio': 0,
+            'sortino_ratio': 0,
+            'max_drawdown': 0,
+            'calmar_ratio': 0,
             'trades': []
         }
 

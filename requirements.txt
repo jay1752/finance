@@ -21,11 +21,11 @@ lxml>=5.1.0
 # Then install with: pip install TA-Lib
 pandas-ta>=0.3.14b0
 
-# Database (Optional - only needed if using PostgreSQL database)
-# Install PostgreSQL first: brew install postgresql (macOS)
-# sqlalchemy>=2.0.25
-# psycopg2-binary>=2.9.9
-# alembic>=1.13.1
+# Database
+# Install PostgreSQL first: brew install postgresql (macOS) if using PostgreSQL
+sqlalchemy>=2.0.25
+psycopg2-binary>=2.9.9  # PostgreSQL adapter
+alembic>=1.13.1  # Database migrations
 
 # Visualization
 plotly==5.18.0
@@ -41,6 +41,10 @@ APScheduler==3.10.4
 pytest==8.0.0
 pytest-cov==4.1.0
 pytest-asyncio==0.23.3
+
+# Sentiment Analysis
+vaderSentiment==3.3.2
+textblob==0.17.1
 
 # Utilities
 tenacity==8.2.3

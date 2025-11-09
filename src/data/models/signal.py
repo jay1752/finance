@@ -19,7 +19,7 @@ class Signal(Base):
     signal_date = Column(DateTime, nullable=False)
     price = Column(Numeric(12, 2), nullable=False)
     confidence = Column(Numeric(5, 2))  # 0-100
-    metadata = Column(JSONB)  # Strategy-specific data
+    signal_metadata = Column(JSONB)  # Strategy-specific data (renamed from 'metadata' to avoid SQLAlchemy conflict)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
@@ -38,6 +38,6 @@ class Signal(Base):
             'signal_date': self.signal_date.isoformat() if self.signal_date else None,
             'price': float(self.price) if self.price else None,
             'confidence': float(self.confidence) if self.confidence else None,
-            'metadata': self.metadata,
+            'signal_metadata': self.signal_metadata,
             'created_at': self.created_at.isoformat() if self.created_at else None,
         }

@@ -31,7 +31,7 @@ class BacktestResult(Base):
     max_loss = Column(Numeric(12, 2))
     sharpe_ratio = Column(Numeric(10, 4))
     max_drawdown = Column(Numeric(10, 2))
-    metadata = Column(JSONB)  # Additional metrics and parameters
+    backtest_metadata = Column(JSONB)  # Additional metrics and parameters (renamed to avoid SQLAlchemy conflict)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
@@ -62,6 +62,6 @@ class BacktestResult(Base):
             'max_loss': float(self.max_loss) if self.max_loss else None,
             'sharpe_ratio': float(self.sharpe_ratio) if self.sharpe_ratio else None,
             'max_drawdown': float(self.max_drawdown) if self.max_drawdown else None,
-            'metadata': self.metadata,
+            'backtest_metadata': self.backtest_metadata,
             'created_at': self.created_at.isoformat() if self.created_at else None,
         }

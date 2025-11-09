@@ -164,11 +164,17 @@ if run_button:
 
             with col3:
                 st.markdown("### 📅 Period")
-                st.write(f"**Start Date:** {results['start_date']}")
-                st.write(f"**End Date:** {results['end_date']}")
-                days = (datetime.strptime(results['end_date'], '%Y-%m-%d') -
-                        datetime.strptime(results['start_date'], '%Y-%m-%d')).days
-                st.write(f"**Duration:** {days} days")
+                st.write(f"**Start Date:** {results['start_date'] or 'N/A'}")
+                st.write(f"**End Date:** {results['end_date'] or 'N/A'}")
+
+                # Calculate duration only if dates are available
+                if results['start_date'] and results['end_date']:
+                    days = (datetime.strptime(results['end_date'], '%Y-%m-%d') -
+                            datetime.strptime(results['start_date'], '%Y-%m-%d')).days
+                    st.write(f"**Duration:** {days} days")
+                else:
+                    st.write(f"**Duration:** N/A")
+
                 st.write(f"**Data Points:** {len(data)}")
 
             st.markdown("---")
