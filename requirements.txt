@@ -1,0 +1,46 @@
+# Core Python
+python-dotenv==1.0.1
+
+# Web Framework & UI
+streamlit>=1.31.0
+fastapi>=0.109.0
+uvicorn>=0.27.0
+
+# Data Processing (Python 3.13 compatible versions)
+pandas>=2.2.0
+numpy>=1.26.0
+
+# Data Fetching
+yfinance>=0.2.36
+requests>=2.31.0
+beautifulsoup4>=4.12.3
+lxml>=5.1.0
+
+# Technical Analysis
+# TA-Lib requires system package first: brew install ta-lib (macOS) or sudo apt-get install ta-lib (Ubuntu)
+# Then install with: pip install TA-Lib
+pandas-ta>=0.3.14b0
+
+# Database (Optional - only needed if using PostgreSQL database)
+# Install PostgreSQL first: brew install postgresql (macOS)
+# sqlalchemy>=2.0.25
+# psycopg2-binary>=2.9.9
+# alembic>=1.13.1
+
+# Visualization
+plotly==5.18.0
+mplfinance==0.12.10b0
+
+# Backtesting
+backtrader==1.9.78.123
+
+# Task Scheduling
+APScheduler==3.10.4
+
+# Testing
+pytest==8.0.0
+pytest-cov==4.1.0
+pytest-asyncio==0.23.3
+
+# Utilities
+tenacity==8.2.3
