@@ -17,7 +17,9 @@ class YahooFinanceAdapter(BaseDataAdapter):
 
     def __init__(self):
         self.name = "yahoo_finance"
-        self.supported_timeframes = ['1d', '1wk', '1mo']
+        # Added 1h and 4h for multi-timeframe analysis
+        # Note: Intraday data (1h, 4h) is limited to ~730 days by Yahoo Finance
+        self.supported_timeframes = ['1h', '4h', '1d', '1wk', '1mo']
 
     def get_historical_data(
         self,
@@ -33,7 +35,8 @@ class YahooFinanceAdapter(BaseDataAdapter):
             symbol: Stock symbol (will be converted to Yahoo format)
             start_date: Start date
             end_date: End date
-            timeframe: Timeframe (1d, 1wk, 1mo)
+            timeframe: Timeframe (1h, 4h, 1d, 1wk, 1mo)
+                Note: 1h and 4h data limited to ~730 days by Yahoo Finance
 
         Returns:
             DataFrame with standardized OHLCV columns

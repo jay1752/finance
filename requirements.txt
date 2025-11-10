@@ -15,6 +15,7 @@ yfinance>=0.2.36
 requests>=2.31.0
 beautifulsoup4>=4.12.3
 lxml>=5.1.0
+py5paisa>=0.4.0  # 5paisa broker API
 
 # Technical Analysis
 # TA-Lib requires system package first: brew install ta-lib (macOS) or sudo apt-get install ta-lib (Ubuntu)
@@ -24,7 +25,7 @@ pandas-ta>=0.3.14b0
 # Database
 # Install PostgreSQL first: brew install postgresql (macOS) if using PostgreSQL
 sqlalchemy>=2.0.25
-psycopg2-binary>=2.9.9  # PostgreSQL adapter
+psycopg2-binary>=2.9.9  # PostgreSQL adapter (optional, for production)
 alembic>=1.13.1  # Database migrations
 
 # Visualization

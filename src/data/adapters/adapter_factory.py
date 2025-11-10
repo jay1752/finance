@@ -7,6 +7,8 @@ from typing import Optional
 from .base_adapter import BaseDataAdapter
 from .yahoo_adapter import YahooFinanceAdapter
 from .nse_adapter import NSEAdapter
+from .fivepaisa_adapter import FivePaisaAdapter
+import os
 import logging
 
 logger = logging.getLogger(__name__)
@@ -29,29 +31,32 @@ class AdapterFactory:
     # Registry of available adapters
     _adapters = {
         'yahoo': YahooFinanceAdapter,
-        # Phase 2: NSE adapter for supplementary data (FII/DII, delivery %)
+        # NSE adapter for supplementary data (FII/DII, delivery %)
         'nse': NSEAdapter,
-        # Phase 3: Add paid adapters
+        # 5paisa - Live data and trading
+        '5paisa': FivePaisaAdapter,
+        # Future: Add other brokers
         # 'upstox': UpstoxAdapter,
         # 'zerodha': ZerodhaAdapter,
     }
 
     # Priority mapping: timeframe -> [preferred_sources]
     _timeframe_priority = {
-        # Phase 1: Free data only
-        '1d': ['yahoo'],
+        # Intraday timeframes - prefer 5paisa if available
+        '1min': ['5paisa'],
+        '5min': ['5paisa'],
+        '15min': ['5paisa'],
+        '30min': ['5paisa'],
+        '1h': ['5paisa', 'yahoo'],
+        '4h': ['yahoo'],  # Yahoo for 4h
+
+        # Daily+ timeframes - 5paisa or Yahoo
+        '1d': ['5paisa', 'yahoo'],
         '1wk': ['yahoo'],
         '1mo': ['yahoo'],
 
-        # Phase 2: Free data + NSE
-        # '1d': ['yahoo', 'nse'],
-
-        # Phase 3: Paid intraday data
-        # '1m': ['upstox', 'zerodha'],
-        # '5m': ['upstox', 'zerodha'],
-        # '15m': ['upstox', 'zerodha'],
-        # '30m': ['upstox', 'zerodha'],
-        # '1h': ['upstox', 'zerodha', 'yahoo'],
+        # Future: Add other brokers
+        # '1min': ['upstox', '5paisa', 'zerodha'],
     }
 
     @classmethod
